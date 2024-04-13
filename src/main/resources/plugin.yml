@@ -1,0 +1,4 @@
+name: FinalChunkLoader
+main: br.com.finalcraft.finalchunkloader.FinalChunkLoader
+version: 1.0.1
+depend: [ EverNifeCore ]
