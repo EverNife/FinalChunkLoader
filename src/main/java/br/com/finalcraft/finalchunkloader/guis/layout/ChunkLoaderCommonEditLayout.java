@@ -1,6 +1,9 @@
 package br.com.finalcraft.finalchunkloader.guis.layout;
 
-import br.com.finalcraft.evernifecore.gui.layout.*;
+import br.com.finalcraft.evernifecore.gui.layout.DefaultIcons;
+import br.com.finalcraft.evernifecore.gui.layout.LayoutBaseData;
+import br.com.finalcraft.evernifecore.gui.layout.LayoutIcon;
+import br.com.finalcraft.evernifecore.gui.layout.LayoutIconData;
 import br.com.finalcraft.evernifecore.gui.util.EnumStainedGlassPane;
 import br.com.finalcraft.evernifecore.itemstack.FCItemFactory;
 import br.com.finalcraft.evernifecore.locale.FCLocale;

@@ -8,17 +8,15 @@ import br.com.finalcraft.evernifecore.minecraft.vector.BlockPos;
 import br.com.finalcraft.finalchunkloader.FinalChunkLoader;
 import br.com.finalcraft.finalchunkloader.chunkloader.CChunkLoader;
 import br.com.finalcraft.finalchunkloader.config.rank.ChunksByGroup;
-import br.com.finalcraft.finalchunkloader.config.settings.BCLSettings;
 import br.com.finalcraft.finalchunkloader.config.settings.ChunkLoaderType;
+import br.com.finalcraft.finalchunkloader.config.settings.FCLSettings;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 public class FCLPlayerData extends PDSection {
 
@@ -89,8 +87,8 @@ public class FCLPlayerData extends PDSection {
 	}
 
 	private void recalibraLimits(){
-		this.alwaysOnLimit = Math.min(this.alwaysOnLimit, BCLSettings.MAX_CHUNK_AMOUNT_ALWAYSON);
-		this.onlineOnlyLimit = Math.min(this.onlineOnlyLimit, BCLSettings.MAX_CHUNK_AMOUNT_ONLINEONLY);
+		this.alwaysOnLimit = Math.min(this.alwaysOnLimit, FCLSettings.MAX_CHUNK_AMOUNT_ALWAYSON);
+		this.onlineOnlyLimit = Math.min(this.onlineOnlyLimit, FCLSettings.MAX_CHUNK_AMOUNT_ONLINEONLY);
 	}
 
 	public List<CChunkLoader> getChunkLoaders() {

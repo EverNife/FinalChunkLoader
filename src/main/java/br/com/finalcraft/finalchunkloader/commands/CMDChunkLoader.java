@@ -9,7 +9,6 @@ import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.locale.FCLocale;
 import br.com.finalcraft.evernifecore.locale.LocaleMessage;
 import br.com.finalcraft.evernifecore.locale.LocaleType;
-import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import br.com.finalcraft.evernifecore.util.FCMessageUtil;
 import br.com.finalcraft.finalchunkloader.FinalChunkLoader;
 import br.com.finalcraft.finalchunkloader.PermissionNodes;
@@ -17,9 +16,7 @@ import br.com.finalcraft.finalchunkloader.chunkloader.CChunkLoader;
 import br.com.finalcraft.finalchunkloader.config.data.FCLPlayerData;
 import br.com.finalcraft.finalchunkloader.config.datastore.ChunkLoaderManager;
 import br.com.finalcraft.finalchunkloader.config.rank.ChunksByGroup;
-import br.com.finalcraft.finalchunkloader.config.rank.GroupLimiter;
 import br.com.finalcraft.finalchunkloader.config.settings.ChunkLoaderType;
-import br.com.finalcraft.finalchunkloader.evernife.EverNifeFunctions;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -458,6 +455,36 @@ public class CMDChunkLoader {
             BCLForgeLib.instance().removeChunkLoader(chunkLoader);
         }
     }
+
+    @FCLocale(lang = LocaleType.PT_BR, text = "§4 ▶ §eTodos os [%amount%] ChunkLoaders do jogador %player% foram desativados.")
+    public static LocaleMessage FCL_IS_ALREADY_DISABLED;
+
+
+//    @FinalCMD.SubCMD(
+//            subcmd = {"disablePremium"},
+//            permission = PermissionNodes.COMMAND_ADMIN
+//    )
+//    public void disable(CommandSender sender) {
+//
+//        if (playersChunks.isEmpty()){
+//            sender.sendMessage("O jogador " + playerData.getPlayerName() + " não possui ChunkLoaders ");
+//            return;
+//        }
+//
+//        sender.sendMessage("--------- Removed Chunks ---------");
+//        playersChunks.forEach(cChunkLoader ->
+//                FancyText.of("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+//                        .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+//                        .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+//                        .send(sender)
+//        );
+//        sender.sendMessage("");
+//
+//        for (CChunkLoader chunkLoader : playersChunks){
+//            chunkLoader.markDisabled = true;
+//            BCLForgeLib.instance().removeChunkLoader(chunkLoader);
+//        }
+//    }
 
     @FinalCMD.SubCMD(
             subcmd = {"reload"},

@@ -4,7 +4,7 @@ import br.com.finalcraft.evernifecore.config.Config;
 import br.com.finalcraft.evernifecore.locale.FCLocaleManager;
 import br.com.finalcraft.finalchunkloader.config.datastore.ChunkLoaderManager;
 import br.com.finalcraft.finalchunkloader.config.rank.ChunksByGroup;
-import br.com.finalcraft.finalchunkloader.config.settings.BCLSettings;
+import br.com.finalcraft.finalchunkloader.config.settings.FCLSettings;
 import br.com.finalcraft.finalchunkloader.guis.LayoutManager;
 import br.com.finalcraft.finalchunkloader.messages.FCLMessages;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,7 +26,7 @@ public class ConfigManager {
         config          = new Config(instance,"config.yml",true);
         chunksByRank    = new Config(instance,"ChunksByGroup.yml", true);
 
-        BCLSettings.initialize();
+        FCLSettings.initialize();
         LayoutManager.initialize();
         ChunksByGroup.initialize();
         ChunkLoaderManager.initialize();

@@ -3,8 +3,8 @@ package br.com.finalcraft.finalchunkloader.chunkloader;
 import br.com.finalcraft.evernifecore.minecraft.vector.BlockPos;
 import br.com.finalcraft.evernifecore.minecraft.vector.ChunkPos;
 import br.com.finalcraft.finalchunkloader.config.data.FCLPlayerData;
-import br.com.finalcraft.finalchunkloader.config.settings.BCLSettings;
 import br.com.finalcraft.finalchunkloader.config.settings.ChunkLoaderType;
+import br.com.finalcraft.finalchunkloader.config.settings.FCLSettings;
 import net.kaikk.mc.bcl.forgelib.ChunkLoader;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -46,7 +46,7 @@ public class CChunkLoader extends ChunkLoader {
 	}
 
 	public boolean hasExpired() {
-		return this.isAdminChunkLoader() ? false : System.currentTimeMillis() - owner.getLastSeen() > TimeUnit.HOURS.toMillis(BCLSettings.MAX_HOURS_OFFLINE);
+		return this.isAdminChunkLoader() ? false : System.currentTimeMillis() - owner.getLastSeen() > TimeUnit.HOURS.toMillis(FCLSettings.MAX_HOURS_OFFLINE);
 	}
 
 	public String getOwnerName() {
@@ -78,9 +78,9 @@ public class CChunkLoader extends ChunkLoader {
 		}
 
 		if (isAlwaysOn) {
-			return BCLSettings.ALWAYS_ON_BLOCK.match(chunkLoaderBlock);
+			return FCLSettings.ALWAYS_ON_BLOCK.match(chunkLoaderBlock);
 		} else {
-			return BCLSettings.ONLINE_ONLY_BLOCK.match(chunkLoaderBlock);
+			return FCLSettings.ONLINE_ONLY_BLOCK.match(chunkLoaderBlock);
 		}
 	}
 

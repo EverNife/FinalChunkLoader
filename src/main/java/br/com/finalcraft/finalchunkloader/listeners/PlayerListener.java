@@ -17,8 +17,8 @@ import br.com.finalcraft.finalchunkloader.chunkloader.CChunkLoader;
 import br.com.finalcraft.finalchunkloader.config.data.FCLPlayerData;
 import br.com.finalcraft.finalchunkloader.config.datastore.ChunkLoaderManager;
 import br.com.finalcraft.finalchunkloader.config.rank.ChunksByGroup;
-import br.com.finalcraft.finalchunkloader.config.settings.BCLSettings;
 import br.com.finalcraft.finalchunkloader.config.settings.ChunkLoaderType;
+import br.com.finalcraft.finalchunkloader.config.settings.FCLSettings;
 import br.com.finalcraft.finalchunkloader.guis.gui.ChunkLoaderEditGui;
 import br.com.finalcraft.finalchunkloader.listeners.util.ChunkLoaderVisualizationUtil;
 import br.com.finalcraft.finalchunkloader.messages.FCLMessages;
@@ -71,7 +71,7 @@ public class PlayerListener implements ECListener {
 			return;
 		}
 
-		if (!BCLSettings.isWorldEnabled(player.getWorld().getName())) {
+		if (!FCLSettings.isWorldEnabled(player.getWorld().getName())) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ public class PlayerListener implements ECListener {
 		}
 
 		//Check if the block is a possible chunkloader
-		ChunkLoaderType chunkLoaderType = BCLSettings.getChunkLoaderType(clickedBlock);
+		ChunkLoaderType chunkLoaderType = FCLSettings.getChunkLoaderType(clickedBlock);
 
 		if (chunkLoaderType == null) {
 			return;
@@ -89,7 +89,7 @@ public class PlayerListener implements ECListener {
 		ItemStack itemStack = FCBukkitUtil.getPlayersHeldItem(player);
 
 		CChunkLoader chunkLoader = ChunkLoaderManager.getChunkLoader(clickedBlock.getLocation());
-		boolean isHoldingTheEditRod = itemStack != null && BCLSettings.INTERACTION_ROD.match(itemStack) == true;
+		boolean isHoldingTheEditRod = itemStack != null && FCLSettings.INTERACTION_ROD.match(itemStack) == true;
 
 		if (chunkLoader != null){
 
@@ -185,12 +185,12 @@ public class PlayerListener implements ECListener {
 			return;
 		}
 
-		if (!BCLSettings.isWorldEnabled(block.getLocation().getWorld().getName())) {
+		if (!FCLSettings.isWorldEnabled(block.getLocation().getWorld().getName())) {
 			return;
 		}
 
 		//Check if the block is a possible chunkloader
-		ChunkLoaderType chunkLoaderType = BCLSettings.getChunkLoaderType(block);
+		ChunkLoaderType chunkLoaderType = FCLSettings.getChunkLoaderType(block);
 		if (chunkLoaderType == null) {
 			return;
 		}

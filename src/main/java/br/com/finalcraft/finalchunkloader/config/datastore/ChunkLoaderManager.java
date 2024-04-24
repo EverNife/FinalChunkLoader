@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ChunkLoaderManager {
 
@@ -41,11 +40,15 @@ public class ChunkLoaderManager {
 
         int playersWithChunkloader = 0;
 
+        List<CChunkLoader> chunkloadersToLoadNow = new ArrayList<>();
+
         for (FCLPlayerData playerData : PlayerController.getAllPlayerData(FCLPlayerData.class)) {
 
             if (playerData.getChunkLoaders().size() > 0){
                 playersWithChunkloader++;
             }
+
+            boolean isPlayerOnline = playerData.isPlayerOnline();
 
             for (CChunkLoader chunkLoader : playerData.getChunkLoaders()) {
 
@@ -55,6 +58,8 @@ public class ChunkLoaderManager {
                     FinalChunkLoader.getLog().warning("Inconsistency on ChunkloaderBlocks, the same block has been placed by two different players at [" + chunkLoader.getLocation().toString() + "]:");
                     FinalChunkLoader.getLog().warning(" - " + existingChunkLoader.getValue().getOwner().getPlayerName());
                     FinalChunkLoader.getLog().warning(" - " + playerData.getPlayerName());
+                }else if (isPlayerOnline || (chunkLoader.isAlwaysOn() && !chunkLoader.hasExpired())){
+                    chunkloadersToLoadNow.add(chunkLoader);
                 }
 
             }
@@ -70,10 +75,6 @@ public class ChunkLoaderManager {
         List<CChunkLoader> alwaysOnChunkloaders = allChunkLoaders.stream().filter(CChunkLoader::isAlwaysOn).collect(Collectors.toList());
         List<CChunkLoader> onlineOnlyChunkloaders = allChunkLoaders.stream().filter(CChunkLoader::isOnlineOnly).collect(Collectors.toList());
 
-        List<CChunkLoader> chunkloadersToLoadNow = allChunkLoaders.stream()
-                .filter(chunkLoader -> chunkLoader.isAlwaysOn() || chunkLoader.isOwnerOnline())
-                .collect(Collectors.toList());
-
         int toLoadNow = chunkloadersToLoadNow.size();
 
         final double PARTITION_LOAD_SIZE = 20D; //Chunks that will be loaded per 20ticks
@@ -81,13 +82,14 @@ public class ChunkLoaderManager {
                 ? 1
                 : (int) (Math.floor(toLoadNow / PARTITION_LOAD_SIZE) + 1);
 
-        List<List<CChunkLoader>> lists = FCCollectionsUtil.partitionEvenly(chunkloadersToLoadNow, parts);
+        List<List<CChunkLoader>> chunkloadersToLoadNowSubLists = FCCollectionsUtil.partitionEvenly(chunkloadersToLoadNow, parts);
 
         FinalChunkLoader.getLog().info(" Loaded [%s] chunk loaders data from (%s/%s) players!", allChunkLoadersSize, playersWithChunkloader, PlayerController.getAllPlayerData(FCLPlayerData.class).size());
         FinalChunkLoader.getLog().info("   AlwaysOn chunk loaders  : %s  (%s chunks)", alwaysOnChunkloaders.size(), alwaysOnChunkloaders.stream().mapToInt(CChunkLoader::totalChunks).sum());
         FinalChunkLoader.getLog().info("   OnlineOnly chunk loaders: %s  (%s chunks)", onlineOnlyChunkloaders.size(), onlineOnlyChunkloaders.stream().mapToInt(CChunkLoader::totalChunks).sum());
 
         if (toLoadNow == 0){
+            FinalChunkLoader.getLog().info("There are no ChunkLoaders to be loaded now, skiping Loading Phase!");
             return;
         }
 
@@ -101,10 +103,10 @@ public class ChunkLoaderManager {
 
         List<CChunkLoader> chunkloadersForRemovalCheck = new ArrayList<>();
 
-        for (int i = 0; i < lists.size(); i++) {
-            List<CChunkLoader> chunkLoaders = lists.get(i);
+        for (int i = 0; i < chunkloadersToLoadNowSubLists.size(); i++) {
+            List<CChunkLoader> chunkLoaders = chunkloadersToLoadNowSubLists.get(i);
 
-            //Load max of 5 chunks per 20 ticks
+            //Load max of 5 chunks per 2 ticks
             FCScheduler.scheduleSyncInTicks(() -> {
                 for (CChunkLoader chunkLoader : chunkLoaders) {
                     if (chunkLoader.validateChunkLoader()){
@@ -113,7 +115,7 @@ public class ChunkLoaderManager {
                         chunkloadersForRemovalCheck.add(chunkLoader);
                     }
                 }
-            }, 20 * i);
+            }, 2 * i);
         }
 
         //After all of them have been added, remove the ones that should not exist anymore
@@ -121,7 +123,7 @@ public class ChunkLoaderManager {
             for (CChunkLoader chunkLoader : chunkloadersForRemovalCheck) {
                 ChunkLoaderManager.removeChunkLoader(chunkLoader.getLocation());
             }
-        }, (20 * lists.size()) + 100);
+        }, (2 * chunkloadersToLoadNowSubLists.size()) + 100);
 
     }
 

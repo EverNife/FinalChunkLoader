@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BCLSettings {
+public class FCLSettings {
 
     public static int MAX_HOURS_OFFLINE;
 
@@ -26,6 +26,8 @@ public class BCLSettings {
 
     public static boolean WILDCARD_WORLD = false;
     public static Set<String> WORLDS_WHITELIST;
+
+    public static boolean ENABLED = true;
 
     public static void initialize(){
 

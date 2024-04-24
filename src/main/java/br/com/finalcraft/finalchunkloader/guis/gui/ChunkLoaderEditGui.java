@@ -13,7 +13,6 @@ import br.com.finalcraft.finalchunkloader.config.settings.ChunkLoaderType;
 import br.com.finalcraft.finalchunkloader.guis.LayoutManager;
 import br.com.finalcraft.finalchunkloader.guis.layout.base.ChunkLoaderEditLayout;
 import br.com.finalcraft.finalchunkloader.messages.FCLMessages;
-import br.com.finalcraft.finalchunkloader.util.FCLForgeLibUtil;
 import br.com.finalcraft.libs.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
