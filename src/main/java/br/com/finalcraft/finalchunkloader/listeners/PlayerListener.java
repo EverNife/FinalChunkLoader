@@ -9,11 +9,13 @@ import br.com.finalcraft.evernifecore.locale.LocaleType;
 import br.com.finalcraft.evernifecore.minecraft.worlddata.BlockMetaData;
 import br.com.finalcraft.evernifecore.minecraft.worlddata.WorldData;
 import br.com.finalcraft.evernifecore.scheduler.FCScheduler;
+import br.com.finalcraft.evernifecore.time.FCTimeFrame;
 import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import br.com.finalcraft.evernifecore.util.FCMessageUtil;
 import br.com.finalcraft.finalchunkloader.FinalChunkLoader;
 import br.com.finalcraft.finalchunkloader.PermissionNodes;
 import br.com.finalcraft.finalchunkloader.chunkloader.CChunkLoader;
+import br.com.finalcraft.finalchunkloader.config.ConfigManager;
 import br.com.finalcraft.finalchunkloader.config.data.FCLPlayerData;
 import br.com.finalcraft.finalchunkloader.config.datastore.ChunkLoaderManager;
 import br.com.finalcraft.finalchunkloader.config.rank.ChunksByGroup;
@@ -93,6 +95,14 @@ public class PlayerListener implements ECListener {
 
 		if (chunkLoader != null){
 
+			if (!ConfigManager.hasStarted()){
+				FCLMessages.THE_SERVER_HAS_JUST_STARTED_WAIT_A_LITTLE.addPlaceholder(
+						"%time%",
+						FCTimeFrame.of(ConfigManager.willBeReadyAt).getFormattedDiscursive()
+				);
+				return;
+			}
+
 			if (isHoldingTheEditRod == false){
 				//If not holding the ROD, show details!
 				CHUNK_LOADER_INFO.
@@ -130,6 +140,14 @@ public class PlayerListener implements ECListener {
 
 		if (isHoldingTheEditRod == false){
 			return; //Even being a chunkloader_block, if not holding the rod, do nothing
+		}
+
+		if (!ConfigManager.hasStarted()){
+			FCLMessages.THE_SERVER_HAS_JUST_STARTED_WAIT_A_LITTLE.addPlaceholder(
+					"%time%",
+					FCTimeFrame.of(ConfigManager.willBeReadyAt).getFormattedDiscursive()
+			);
+			return;
 		}
 
 		if (!canBreak(clickedBlock, player)){ //Check if we can break here
@@ -178,6 +196,10 @@ public class PlayerListener implements ECListener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if (!ConfigManager.hasStarted()){
+			return;
+		}
+
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
@@ -220,6 +242,9 @@ public class PlayerListener implements ECListener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	void onPlayerLogin(ECFullyLoggedInEvent event) {
+		if (!ConfigManager.hasStarted()){
+			return;
+		}
 
 		FCScheduler.scheduleSyncInTicks(() -> {
 			if (event.getPlayer().isOnline()){
@@ -244,6 +269,10 @@ public class PlayerListener implements ECListener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	void onPlayerQuit(PlayerQuitEvent event) {
+		if (!ConfigManager.hasStarted()){
+			return;
+		}
+
 		FCLPlayerData playerData = PlayerController.getPDSection(event.getPlayer(), FCLPlayerData.class);
 
 		List<CChunkLoader> clList = playerData.getChunkLoaders();
@@ -257,6 +286,10 @@ public class PlayerListener implements ECListener {
 	
     @EventHandler(priority = EventPriority.MONITOR)
     void onWorldLoad(WorldLoadEvent event) {
+		if (!ConfigManager.hasStarted()){
+			return;
+		}
+
 		WorldData<CChunkLoader> worldData = ChunkLoaderManager.getChunkloaderDatabase().getWorldData(event.getWorld().getName());
 
 		if (worldData != null){

@@ -77,13 +77,6 @@ public class ChunkLoaderManager {
 
         int toLoadNow = chunkloadersToLoadNow.size();
 
-        final double PARTITION_LOAD_SIZE = 20D; //Chunks that will be loaded per 20ticks
-        int parts = toLoadNow <= PARTITION_LOAD_SIZE
-                ? 1
-                : (int) (Math.floor(toLoadNow / PARTITION_LOAD_SIZE) + 1);
-
-        List<List<CChunkLoader>> chunkloadersToLoadNowSubLists = FCCollectionsUtil.partitionEvenly(chunkloadersToLoadNow, parts);
-
         FinalChunkLoader.getLog().info(" Loaded [%s] chunk loaders data from (%s/%s) players!", allChunkLoadersSize, playersWithChunkloader, PlayerController.getAllPlayerData(FCLPlayerData.class).size());
         FinalChunkLoader.getLog().info("   AlwaysOn chunk loaders  : %s  (%s chunks)", alwaysOnChunkloaders.size(), alwaysOnChunkloaders.stream().mapToInt(CChunkLoader::totalChunks).sum());
         FinalChunkLoader.getLog().info("   OnlineOnly chunk loaders: %s  (%s chunks)", onlineOnlyChunkloaders.size(), onlineOnlyChunkloaders.stream().mapToInt(CChunkLoader::totalChunks).sum());
@@ -93,37 +86,32 @@ public class ChunkLoaderManager {
             return;
         }
 
-        FinalChunkLoader.getLog().info(" Marked %s chunk loaders (%s chunks) (alwaysOn=%s, onlineOnly=%s) to load NOW, in %s parts!",
+        FinalChunkLoader.getLog().info(" Marked %s chunk loaders (%s chunks) (alwaysOn=%s, onlineOnly=%s) to load NOW!",
                 toLoadNow,
                 chunkloadersToLoadNow.stream().mapToInt(CChunkLoader::totalChunks).sum(),
                 alwaysOnChunkloaders.size(),
-                (toLoadNow - alwaysOnChunkloaders.size()),
-                parts
+                (toLoadNow - alwaysOnChunkloaders.size())
         );
 
         List<CChunkLoader> chunkloadersForRemovalCheck = new ArrayList<>();
 
-        for (int i = 0; i < chunkloadersToLoadNowSubLists.size(); i++) {
-            List<CChunkLoader> chunkLoaders = chunkloadersToLoadNowSubLists.get(i);
-
-            //Load max of 5 chunks per 2 ticks
-            FCScheduler.scheduleSyncInTicks(() -> {
-                for (CChunkLoader chunkLoader : chunkLoaders) {
-                    if (chunkLoader.validateChunkLoader()){
-                        setChunkLoader(chunkLoader.getLocation(), chunkLoader);
-                    }else {
-                        chunkloadersForRemovalCheck.add(chunkLoader);
-                    }
-                }
-            }, 2 * i);
-        }
-
-        //After all of them have been added, remove the ones that should not exist anymore
         FCScheduler.scheduleSyncInTicks(() -> {
-            for (CChunkLoader chunkLoader : chunkloadersForRemovalCheck) {
-                ChunkLoaderManager.removeChunkLoader(chunkLoader.getLocation());
+            for (CChunkLoader chunkLoader : chunkloadersToLoadNow) {
+                if (chunkLoader.validateChunkLoader()){
+                    setChunkLoader(chunkLoader.getLocation(), chunkLoader);
+                }else {
+                    chunkloadersForRemovalCheck.add(chunkLoader);
+                }
             }
-        }, (2 * chunkloadersToLoadNowSubLists.size()) + 100);
+
+            //After all of them have been added, remove the ones that should not exist anymore
+            FCScheduler.scheduleSyncInTicks(() -> {
+                for (CChunkLoader chunkLoader : chunkloadersForRemovalCheck) {
+                    ChunkLoaderManager.removeChunkLoader(chunkLoader.getLocation());
+                }
+            }, 200);
+        }, 5);
+
 
     }
 

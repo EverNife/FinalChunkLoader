@@ -13,6 +13,8 @@ import br.com.finalcraft.finalchunkloader.util.FCLForgeLibUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.TimeUnit;
+
 @ECPlugin(
 		bstatsID = "21497"
 )
@@ -37,17 +39,20 @@ public class FinalChunkLoader extends JavaPlugin {
 		CommandRegisterer.registerCommands(this);
 
 		FCScheduler.scheduleSyncInTicks(() -> {
-			//Load only after 2 seconds to make sure all other plugins are loaded and worlds as well
-			getLog().info("Loading Configuration...");
-			ConfigManager.initialize(this);
+			ConfigManager.willBeReadyAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(65);
+			FCScheduler.scheduleSync(() -> {
+				//Load only after 2 seconds to make sure all other plugins are loaded and worlds as well
+				getLog().info("Loading Configuration...");
+				ConfigManager.initialize(this);
 
-			getLog().info("Registering Listeners...");
-			ECListener.register(this, PlayerListener.class);
+				getLog().info("Registering Listeners...");
+				ECListener.register(this, PlayerListener.class);
 
-			if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
-				PlaceHolderIntegration.initialize(this);
-			}
-		},40);
+				if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+					PlaceHolderIntegration.initialize(this);
+				}
+			}, TimeUnit.SECONDS.toMillis(60));
+		},20);
 	}
 
 	@ECPlugin.Reload(

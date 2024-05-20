@@ -22,7 +22,12 @@ public class ConfigManager {
         return chunksByRank;
     }
 
+    public static long willBeReadyAt = Integer.MAX_VALUE;
+    public static boolean started = false;
+
     public static void initialize(JavaPlugin instance){
+        started = true;
+
         config          = new Config(instance,"config.yml",true);
         chunksByRank    = new Config(instance,"ChunksByGroup.yml", true);
 
@@ -35,5 +40,9 @@ public class ConfigManager {
                 instance,
                 FCLMessages.class
         );
+    }
+
+    public static boolean hasStarted() {
+        return started;
     }
 }

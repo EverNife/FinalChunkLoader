@@ -30,4 +30,8 @@ public class FCLMessages {
     @FCLocale(lang = LocaleType.EN_US, text = "§2§l ▶ §aChunkLoader successfully created! Choose a size for it.")
     public static LocaleMessage CHUNK_LOADER_SUCCESSFULLY_CREATED;
 
+    @FCLocale(lang = LocaleType.PT_BR, text = "§4§l ▶ §eO servidor acabou de ligar, antes de mexer com ChunkLoaders espere mais %time%.")
+    @FCLocale(lang = LocaleType.EN_US, text = "§4§l ▶ §eThe server has just started, before manipulating your chunkloaders wait more %time%.")
+    public static LocaleMessage THE_SERVER_HAS_JUST_STARTED_WAIT_A_LITTLE;
+
 }
