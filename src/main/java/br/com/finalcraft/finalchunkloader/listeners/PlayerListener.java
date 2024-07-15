@@ -115,7 +115,7 @@ public class PlayerListener implements ECListener {
 						send(player);
 
 				if (player.isSneaking()) {
-					FCScheduler.runAssync(() -> {
+					FCScheduler.runAsync(() -> {
 						ChunkLoaderVisualizationUtil.showCorners(chunkLoader, player);
 					});
 				}
