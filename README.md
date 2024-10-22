@@ -12,11 +12,12 @@ The amount of chunks that can be loaded per player can be set manually with inga
 
 It provides ingame-commands for admins so they can remove all chunk loaders for a player, and chunk loaders can be disabled by disabling the plugin.
 
-This plugin requires [BCLForgeLib](https://github.com/KaiKikuchi/BCLForgeLib), a server-side Forge mod library, so it can be added to any modpack without requiring the mod on client-side.
+This plugin requires BCLForgeLib, a server-side Forge mod library, so it can be added to any modpack without requiring the mod on client-side.
 
 #### Installation
-- Download FinalChunkLoader and place it on the plugins folder
-- Download BCLForgeLib and place it on the mods folder
+- Download [FinalChunkLoader](https://github.com/EverNife/FinalChunkLoader/releases) and place it on the plugins folder
+- Download [EverNifeCore](https://github.com/EverNife/EverNifeCore) and place it on the plugins folder.
+- Download BCLForgeLib and place it on the mods folder.
 
 #### Commands
 - /fcl <info|list|chunks|delete|purge|reload|enable|disable> - main commands
