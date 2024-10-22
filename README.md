@@ -4,7 +4,7 @@ This is a plugin for Crucible MC1.7.10 servers that allows players to make chunk
 
 This plugins is a remake of [BetterChunkLoader](https://github.com/EverNife/BetterChunkLoader).
 
-It is fully customizable, all messages can be changed in the config file, and it has a (editable) GUI to create and edit chunk loaders.
+It is fully customizable, all messages can be changed in the config file, and it has a GUI (editable) to create and edit chunk loaders.
 
 It has an online-only (work only when the player is online), and an always-on chunk loader (works even if the player is offline).
 
